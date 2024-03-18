@@ -84,3 +84,28 @@ function el_post_type_init() {
 	);
 }
 add_action( 'init', 'el_post_type_init' );
+
+
+
+function elprod_options_assets() {
+	wp_enqueue_script( 'el-sp-script', trailingslashit( get_stylesheet_directory_uri() ) . 'build/build.js', array( 'wp-api', 'wp-i18n', 'wp-components', 'wp-element' ), wp_get_theme()->get( 'Version' ) , true );
+	wp_enqueue_style( 'el-sp-style', trailingslashit( get_stylesheet_directory_uri() ) . 'build/build.css', array( 'wp-components' ) );
+}
+
+function elprod_menu_callback() {
+	echo '<div id="elchallenge-products"></div>';
+}
+
+function elprod_add_option_menu() {
+	$page_hook_suffix = add_options_page(
+		__( 'Products', 'twentytwenty' ),
+		__( 'Products', 'twentytwenty' ),
+		'manage_options',
+		'awesome',
+		'elprod_menu_callback'
+	);
+
+	add_action( "admin_print_scripts-{$page_hook_suffix}", 'elprod_options_assets' );
+}
+
+add_action( 'admin_menu', 'elprod_add_option_menu' );
